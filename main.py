@@ -12,37 +12,47 @@ class TestApp(QtWidgets.QMainWindow, start_design.Ui_MainWindow):
         self.startButton.clicked.connect(self.choose_theme)
 
     def choose_theme(self):
-        self.theme_window = ThemesChoose()
+        is_teacher = self.roleTeacher.isChecked()
+        self.theme_window = ThemesChoose(is_teacher)
         self.theme_window.show()
         self.hide()
 
 
 class ThemesChoose(QtWidgets.QWidget, themes_design.Ui_Form):
-    def __init__(self):
+    def __init__(self, is_teacher=False):
         super().__init__()
         self.setupUi(self)
+        self.is_teacher = is_teacher
+        self.themes = []
 
-        for i in range(5):
+        for i in range(5): 
             edit = QtWidgets.QLineEdit(self)
             edit.setText('0')
+            self.themes.append(edit)
             self.formLayout.addRow(self.tr(f'Тема {i+1}'), edit)
         self.startButton.clicked.connect(self.startTest)
 
     def startTest(self):
-        self.test = TestForm()
+        themes = []
+        for field in self.themes:
+            cnt = field.text()
+            cnt = int(cnt)
+            themes.append(cnt)
+        self.test = TestForm(self.is_teacher, themes)
         self.test.show()
         self.hide()
 
 
 class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
-    def __init__(self):
+    def __init__(self, is_teacher:bool=False, themes:list=[]):
         super().__init__()
         self.setupUi(self)
+        self.is_teacher = is_teacher
 
         self.scrollArea.setWidgetResizable(True)
         self.vbox = QtWidgets.QVBoxLayout()
         self.tasks = []
-        for i in range(8):
+        for i in range(sum(themes)):
             task = QtWidgets.QGroupBox(f'Задание {i+1}')
             task.setMinimumWidth(self.scrollArea.width())
 
@@ -55,6 +65,8 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
 
             ans = QtWidgets.QLineEdit()
             ans.setPlaceholderText('Ответ')
+            if self.is_teacher:
+                ans.setText('0')
             vl.addWidget(ans)
 
             task.setLayout(vl)
