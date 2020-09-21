@@ -1,14 +1,16 @@
 import sys
 from PyQt5 import QtWidgets
 from design import start_design, themes_design, test_design, res_design
+import db
 
 
 class TestApp(QtWidgets.QMainWindow, start_design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.subjectComboBox.addItem('Информатика')
-        self.subjectComboBox.addItem('Химия')
+        subjects = db.get_subjects()
+        for subject in subjects:
+            self.subjectComboBox.addItem(subject)
         self.startButton.clicked.connect(self.choose_theme)
 
     def choose_theme(self):
