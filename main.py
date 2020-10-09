@@ -2,6 +2,9 @@ import sys
 from PyQt5 import QtWidgets
 from design import start_design, themes_design, test_design, res_design
 import db
+"""
+За основу взяты задания с сайта РешуЕГЭ
+"""
 
 
 class TestApp(QtWidgets.QMainWindow, start_design.Ui_MainWindow):
@@ -12,26 +15,33 @@ class TestApp(QtWidgets.QMainWindow, start_design.Ui_MainWindow):
         for subject in subjects:
             self.subjectComboBox.addItem(subject)
         self.startButton.clicked.connect(self.choose_theme)
+        self.startButton.setEnabled(False)
+        self.subjectComboBox.currentIndexChanged.connect(self.activate_button)
+    
+    def activate_button(self):
+        self.startButton.setEnabled(True)
 
     def choose_theme(self):
+        print(self.subjectComboBox.currentIndex())
         is_teacher = self.roleTeacher.isChecked()
-        self.theme_window = ThemesChoose(is_teacher)
+        self.theme_window = ThemesChoose(is_teacher, self.subjectComboBox.currentIndex())
         self.theme_window.show()
         self.hide()
 
 
 class ThemesChoose(QtWidgets.QWidget, themes_design.Ui_Form):
-    def __init__(self, is_teacher=False):
+    def __init__(self, is_teacher=False, subject_id=0):
         super().__init__()
         self.setupUi(self)
         self.is_teacher = is_teacher
         self.themes = []
 
-        for i in range(5): 
+        self.theme_names = db.get_themes(subject_id)
+        for theme in self.theme_names:
             edit = QtWidgets.QLineEdit(self)
             edit.setText('0')
             self.themes.append(edit)
-            self.formLayout.addRow(self.tr(f'Тема {i+1}'), edit)
+            self.formLayout.addRow(self.tr(theme), edit)
         self.startButton.clicked.connect(self.startTest)
 
     def startTest(self):
@@ -54,27 +64,31 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
         self.scrollArea.setWidgetResizable(True)
         self.vbox = QtWidgets.QVBoxLayout()
         self.tasks = []
-        for i in range(sum(themes)):
-            task = QtWidgets.QGroupBox(f'Задание {i+1}')
-            task.setMinimumWidth(self.scrollArea.width())
+        import generators,random
+        for i,cnt in enumerate(themes):
+            for j in range(cnt):
+                task = QtWidgets.QGroupBox(f'Задание {j+1}')
+                task.setMinimumWidth(self.scrollArea.width())
 
-            vl = QtWidgets.QVBoxLayout()
+                vl = QtWidgets.QVBoxLayout()
 
-            text = QtWidgets.QTextBrowser()
-            text.setMinimumHeight(200)
-            text.setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris varius nisi dapibus dolor malesuada posuere. In consectetur quam id diam sodales venenatis. Aenean ultrices eget nulla quis pharetra. Donec sit amet metus in diam imperdiet convallis. Proin consequat ex sed neque pulvinar volutpat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec at odio eget nibh aliquet sodales vitae quis augue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempor est ac dolor facilisis luctus ut id felis. Nullam nec egestas sapien, eget euismod nulla.')
-            vl.addWidget(text)
+                t = generators.generate_inf[random.randint(0,1)]()
 
-            ans = QtWidgets.QLineEdit()
-            ans.setPlaceholderText('Ответ')
-            if self.is_teacher:
-                ans.setText('0')
-            vl.addWidget(ans)
+                text = QtWidgets.QTextBrowser()
+                text.setMinimumHeight(200)
+                text.setText(t[0])
+                vl.addWidget(text)
 
-            task.setLayout(vl)
+                ans = QtWidgets.QLineEdit()
+                ans.setPlaceholderText('Ответ')
+                if self.is_teacher:
+                    ans.setText(str(t[1]))
+                vl.addWidget(ans)
 
-            self.tasks.append(task)
-            self.vbox.addWidget(task)
+                task.setLayout(vl)
+
+                self.tasks.append(task)
+                self.vbox.addWidget(task)
         self.Tasks.setLayout(self.vbox)
 
         self.finishButton.clicked.connect(self.getResults)
