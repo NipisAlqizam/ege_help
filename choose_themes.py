@@ -6,6 +6,7 @@ class ThemesChoose(QtWidgets.QWidget, themes_design.Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.is_teacher = is_teacher
+        print(subject_id)
         self.themes = []
         self.subject_id = subject_id
 

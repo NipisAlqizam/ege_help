@@ -17,7 +17,8 @@ def get_subjects():
 
 def get_themes(subject_id):
     from models import Theme
-    themes = session.query(Theme).filter(subject_id == subject_id).all()
+    subject_id += 1
+    themes = session.query(Theme).filter(Theme.subject_id == subject_id).all()
     res = []
     for theme in themes:
         res.append(theme.name)
