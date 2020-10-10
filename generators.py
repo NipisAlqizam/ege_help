@@ -38,7 +38,7 @@ def generate_3():
 
 def generate_4():
     t = db.get_template(4)
-    tmp = [[['два','четыре'], 
+    tmp = [[['один','четыре'], 
 '''1. Na
 2. K
 3. Si

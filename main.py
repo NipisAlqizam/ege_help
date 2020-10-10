@@ -20,7 +20,7 @@ def launch_test(self, is_teacher, themes, subject_id):
     self.hide()
 
 def getResults(self):
-    self.res = ResForm()
+    self.res = ResForm(self.checkTest(), len(self.answers))
     self.res.show()
     self.hide()
 
@@ -30,9 +30,10 @@ TestForm.getResults = getResults
 
 
 class ResForm(QtWidgets.QWidget, res_design.Ui_Form):
-    def __init__(self):
+    def __init__(self, corr_cnt, cnt):
         super().__init__()
         self.setupUi(self)
+        self.resultText.setHtml(f"<p style=\"font-size:12pt;\">Правильно сделано {corr_cnt} из {cnt} заданий.</p>")
 
 
 app = QtWidgets.QApplication(sys.argv)

@@ -10,6 +10,8 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
         self.scrollArea.setWidgetResizable(True)
         self.vbox = QtWidgets.QVBoxLayout()
         self.tasks = []
+        self.answers = []
+        self.ans_fields = []
         import generators
         for i,cnt in enumerate(themes):
             for j in range(cnt):
@@ -34,10 +36,20 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
                 task.setLayout(vl)
 
                 self.tasks.append(task)
+                self.answers.append(t[1])
+                self.ans_fields.append(ans)
                 self.vbox.addWidget(task)
         self.Tasks.setLayout(self.vbox)
 
         self.finishButton.clicked.connect(self.getResults)
 
-        def getResults(self):
-            pass
+    def checkTest(self):
+            correct_cnt = 0
+            for ans, correct_ans in zip(self.ans_fields, self.answers):
+                if ans.text() == str(correct_ans):
+                    correct_cnt += 1
+            print(correct_cnt)
+            return correct_cnt
+
+    def getResults(self):
+        pass
