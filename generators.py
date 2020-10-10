@@ -29,4 +29,12 @@ def generate_2():
     a = a.format(ps, basis,digit)
     return (a,ans)
 
-generate_inf = [generate_1, generate_2]
+generate_inf = [[generate_1, generate_2]]
+
+def generate(subject_id, theme_id):
+    print(theme_id)
+    if subject_id == 0:
+        l = len(generate_inf[theme_id])
+        return generate_inf[theme_id][random.randint(0,l-1)]()
+    else:
+        return('', 0)
