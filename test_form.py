@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 from design import test_design
 
 class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
-    def __init__(self, is_teacher:bool=False, themes:list=[], subject_id=1, db=None):
+    def __init__(self, is_teacher:bool=False, themes:dict={}, subject_id=1, db=None):
         super().__init__()
         self.setupUi(self)
         self.is_teacher = is_teacher
@@ -12,15 +12,15 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
         self.tasks = []
         self.answers = []
         self.ans_fields = []
-        import generators
-        for i,cnt in enumerate(themes):
+        import generate
+        for i,cnt in themes.items():
             for j in range(cnt):
                 task = QtWidgets.QGroupBox(f'Задание {j+1}')
                 task.setMinimumWidth(self.scrollArea.width())
 
                 vl = QtWidgets.QVBoxLayout()
 
-                t = generators.generate(subject_id,i)
+                t = generate.generate(subject_id,i-1)
 
                 text = QtWidgets.QTextBrowser()
                 text.setMinimumHeight(200)

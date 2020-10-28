@@ -21,7 +21,7 @@ def get_themes(subject_id):
     themes = session.query(Theme).filter(Theme.subject_id == subject_id).all()
     res = []
     for theme in themes:
-        res.append(theme.name)
+        res.append((theme.id, theme.name))
     return res
 
 def get_template(id):
