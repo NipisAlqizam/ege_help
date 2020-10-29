@@ -36,18 +36,31 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>782</width>
-        <height>547</height>
+        <width>780</width>
+        <height>531</height>
        </rect>
       </property>
      </widget>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="finishButton">
-     <property name="text">
-      <string>Завершить</string>
-     </property>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="createPDFButton">
+        <property name="text">
+         <string>Создать PDF</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="finishButton">
+        <property name="text">
+         <string>Завершить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

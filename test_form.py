@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from design import test_design
+import pdf_generator
 
 class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
     def __init__(self, is_teacher:bool=False, themes:dict={}, subject_id=1, db=None):
@@ -11,6 +12,7 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
         self.vbox = QtWidgets.QVBoxLayout()
         self.tasks = []
         self.answers = []
+        self.test = []
         self.ans_fields = []
         import generate
         for i,cnt in themes.items():
@@ -36,12 +38,14 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
                 task.setLayout(vl)
 
                 self.tasks.append(task)
+                self.test.append(t)
                 self.answers.append(t[1])
                 self.ans_fields.append(ans)
                 self.vbox.addWidget(task)
         self.Tasks.setLayout(self.vbox)
 
         self.finishButton.clicked.connect(self.getResults)
+        self.createPDFButton.clicked.connect(self.generatePDF)
 
     def checkTest(self):
             correct_cnt = 0
@@ -50,6 +54,16 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
                     correct_cnt += 1
             print(correct_cnt)
             return correct_cnt
+    
+    def generatePDF(self):
+        pdf = pdf_generator.TestPDFGenerator(self.test)
+        pdf.write_tasks()
+        pdf.output('tasks.pdf', 'F')
+        if self.is_teacher:
+            pdf = pdf_generator.TestPDFGenerator(self.test)
+            pdf.write_tasks()
+            pdf.write_answers()
+            pdf.output('tasks_with_answers.pdf', 'F')
 
     def getResults(self):
         pass
