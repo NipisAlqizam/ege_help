@@ -3,7 +3,7 @@ from design import test_design
 import pdf_generator
 
 class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
-    def __init__(self, is_teacher:bool=False, themes:dict={}, subject_id=1, db=None):
+    def __init__(self, is_teacher:bool=False, themes:dict={}, subject_name='', db=None):
         super().__init__()
         self.setupUi(self)
         self.is_teacher = is_teacher
@@ -15,14 +15,15 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
         self.test = []
         self.ans_fields = []
         import generate
-        for i,cnt in themes.items():
+        cnt_ = 0
+        for theme,cnt in themes.items():
             for j in range(cnt):
-                task = QtWidgets.QGroupBox(f'Задание {j+1}')
+                task = QtWidgets.QGroupBox(f'Задание {cnt_+1}')
                 task.setMinimumWidth(self.scrollArea.width())
 
                 vl = QtWidgets.QVBoxLayout()
 
-                t = generate.generate(subject_id,i-1)
+                t = generate.generate(subject_name,theme)
 
                 text = QtWidgets.QTextBrowser()
                 text.setMinimumHeight(200)
@@ -42,6 +43,8 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
                 self.answers.append(t[1])
                 self.ans_fields.append(ans)
                 self.vbox.addWidget(task)
+
+                cnt_ += 1
         self.Tasks.setLayout(self.vbox)
 
         self.finishButton.clicked.connect(self.getResults)
@@ -52,7 +55,6 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
             for ans, correct_ans in zip(self.ans_fields, self.answers):
                 if ans.text() == str(correct_ans):
                     correct_cnt += 1
-            print(correct_cnt)
             return correct_cnt
     
     def generatePDF(self):

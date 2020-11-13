@@ -9,13 +9,13 @@ import db
 За основу взяты задания с сайта РешуЕГЭ
 """
 
-def launch_theme_chooser(self, is_teacher, subject_id):
-        self.theme_window = ThemesChoose(is_teacher, subject_id, db)
+def launch_theme_chooser(self, is_teacher, subject_name):
+        self.theme_window = ThemesChoose(is_teacher, subject_name, db)
         self.theme_window.show()
         self.hide()
 
-def launch_test(self, is_teacher, themes, subject_id):
-    self.test = TestForm(is_teacher, themes, subject_id, db)
+def launch_test(self, is_teacher, themes, subject_name):
+    self.test = TestForm(is_teacher, themes, subject_name, db)
     self.test.show()
     self.hide()
 

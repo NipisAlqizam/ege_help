@@ -2,29 +2,31 @@ from PyQt5 import QtWidgets
 from design import themes_design
 
 class ThemesChoose(QtWidgets.QWidget, themes_design.Ui_Form):
-    def __init__(self, is_teacher=False, subject_id=0, db=None):
+    def __init__(self, is_teacher, subject_name, db):
         super().__init__()
         self.setupUi(self)
         self.is_teacher = is_teacher
-        print(subject_id)
         self.themes = []
-        self.subject_id = subject_id
+        self.subject_name = subject_name
 
-        self.theme_names_and_ids = db.get_themes(subject_id)
-        for id,theme in self.theme_names_and_ids:
+        self.theme_names= db.get_themes(subject_name)
+        for theme in self.theme_names:
             edit = QtWidgets.QLineEdit(self)
             edit.setText('0')
-            self.themes.append((id,edit))
+            self.themes.append((theme,edit))
             self.formLayout.addRow(self.tr(theme), edit)
         self.startButton.clicked.connect(self.startTest)
 
     def startTest(self):
         themes = {}
-        for id,field in self.themes:
+        for name,field in self.themes:
             cnt = field.text()
-            cnt = int(cnt)
-            themes[id] = cnt
-        self.showTestForm(self.is_teacher, themes, self.subject_id)
+            try:
+                cnt = int(cnt)
+            except ValueError:
+                return
+            themes[name] = cnt
+        self.showTestForm(self.is_teacher, themes, self.subject_name)
     
-    def showTestForm(self, is_teacher, themes, subject_id):
+    def showTestForm(self, is_teacher, themes, subject_name):
         pass

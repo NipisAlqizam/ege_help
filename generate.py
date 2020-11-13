@@ -14,13 +14,13 @@ def get_generator_names():
 def get_generators():
     names = get_generator_names()
     generators = [importlib.import_module('generators.'+name) for name in names]
-    res = [[],[],[],[]]
-    for g in generators:
-        res[g.theme-1].append(g)
-    return res
+    return generators
 
-def generate(subject_id, theme_id):
-    l = len(generators[theme_id])-1
-    return generators[theme_id][random.randint(0,l)].generate()
+def generate(subject_name, theme_name):
+    l = []
+    for g in generators:
+        if g.subject_name == subject_name and g.theme_name == theme_name:
+            l.append(g)
+    return random.choice(l).generate()
 
 generators = get_generators()

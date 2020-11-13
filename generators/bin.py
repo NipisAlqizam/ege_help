@@ -1,8 +1,8 @@
 import random
 
 a = 'Сколько единиц содержится в двоичной записи значения выражения: {}'
-subject = 1
-theme = 1
+subject_name= "Информатика"
+theme_name= "Системы счисления"
 
 def generate():
     a1 = random.randint(20,1000)
