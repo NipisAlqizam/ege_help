@@ -33,5 +33,5 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Выбор тем"))
-        self.themeGroup.setTitle(_translate("Form", "Количество задач по теме"))
+        self.themeGroup.setTitle(_translate("Form", "Выберите количество задач по каждой теме"))
         self.startButton.setText(_translate("Form", "Начать"))

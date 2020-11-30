@@ -17,7 +17,7 @@
    <item>
     <widget class="QGroupBox" name="themeGroup">
      <property name="title">
-      <string>Количество задач по теме</string>
+      <string>Выберите количество задач по каждой теме</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
