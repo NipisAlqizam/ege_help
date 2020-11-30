@@ -7,6 +7,8 @@ class TestForm(QtWidgets.QWidget, test_design.Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.is_teacher = is_teacher
+        if is_teacher:
+            self.finishButton.setDisabled(True)
 
         self.scrollArea.setWidgetResizable(True)
         self.vbox = QtWidgets.QVBoxLayout()
